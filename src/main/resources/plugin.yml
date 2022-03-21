@@ -1,0 +1,11 @@
+name: MyDetour
+version: '${project.version}'
+main: ru.deelter.detour.MyDetour
+api-version: 1.18
+prefix: MyDetour
+authors: [ DeelTer ]
+description: Detours on your server
+website: https://vk.com/deelter
+commands:
+  detour:
+    aliases: [ mydetour ]
