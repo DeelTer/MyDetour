@@ -27,6 +27,6 @@ public class LocationUtils {
 		return loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + "," + loc.getZ();
 	}
 
-	public static void setup() {
+	public static void init() {
 	}
 }

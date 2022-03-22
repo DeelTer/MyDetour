@@ -4,24 +4,24 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.event.player.PlayerQuitEvent;
+import ru.deelter.detour.MyDetour;
 import ru.deelter.detour.managers.DetourManager;
 import ru.deelter.detour.utils.Detour;
 import ru.deelter.detour.utils.DetourPlayer;
 
-public class PlayerNotifyListener implements Listener {
+public class PlayerDetourActionListener implements Listener {
 
 	@EventHandler
-	public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
-		Player player = event.getPlayer();
+	public void onPlayerQuit(PlayerQuitEvent event) {
 		Detour detour = DetourManager.getDetour();
 		if (detour.isStarted()) {
+			Player player = event.getPlayer();
 			DetourPlayer detourPlayer = detour.getPlayerByUuid(player.getUniqueId());
 			if (detourPlayer != null) {
-				player.sendMessage("Ура, вы уже в обходе!");
-				return;
+				detourPlayer.setLastLocation(player.getLocation());
+				MyDetour.getInstance().getLogger().info("Player " + player.getName() + " leave the game. We saved his last location");
 			}
-			player.sendMessage("Обход уже начался! Чтобы присоединиться - пиши /detour join");
 		}
 	}
 }

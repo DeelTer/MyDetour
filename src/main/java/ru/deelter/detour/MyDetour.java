@@ -5,6 +5,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.deelter.detour.commands.DetourCommand;
 import ru.deelter.detour.configs.DetourConfig;
+import ru.deelter.detour.listeners.PlayerDetourActionListener;
 import ru.deelter.detour.listeners.PlayerNotifyListener;
 import ru.deelter.detour.managers.DetourDataManager;
 import ru.deelter.detour.managers.DetourManager;
@@ -32,13 +33,14 @@ public final class MyDetour extends JavaPlugin {
 		DetourManager.load();
 
 		DetourCommand.setup(this);
-		LocationUtils.setup();
+		LocationUtils.init();
 		this.setupListeners();
 	}
 
 	private void setupListeners() {
 		PluginManager manager = Bukkit.getPluginManager();
 		manager.registerEvents(new PlayerNotifyListener(), this);
+		manager.registerEvents(new PlayerDetourActionListener(), this);
 	}
 
 	@Override

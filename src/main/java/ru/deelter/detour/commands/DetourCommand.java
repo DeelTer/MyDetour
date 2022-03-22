@@ -42,6 +42,7 @@ public class DetourCommand implements TabExecutor {
 			case "reload" -> DetourReloadCommand.execute(sender, args);
 			case "next" -> DetourNextCommand.execute(sender, args);
 			case "list" -> DetourListCommand.execute(sender, args);
+			case "savedata" -> DetourSaveDataCommand.execute(sender, args);
 		}
 		return true;
 	}
@@ -51,7 +52,7 @@ public class DetourCommand implements TabExecutor {
 		List<String> suggestions = new ArrayList<>();
 		if (args.length == 1) {
 			suggestions.addAll(Arrays.asList("join", "leave"));
-			if (sender.isOp()) suggestions.addAll(Arrays.asList("start", "stop", "next", "list", "reload"));
+			if (sender.isOp()) suggestions.addAll(Arrays.asList("start", "stop", "next", "list", "reload", "saveData"));
 		}
 		return filter(suggestions, args);
 	}

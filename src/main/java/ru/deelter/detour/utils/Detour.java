@@ -6,14 +6,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.deelter.detour.MyDetour;
 import ru.deelter.detour.managers.DetourDataManager;
+import ru.deelter.detour.managers.DetourManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Detour {
 
 	private final List<DetourPlayer> players = new ArrayList<>();
 	private long startedTimeMs;
+	private DetourPlayer currentPlayer;
 
 	public List<DetourPlayer> getPlayers() {
 		return players;
@@ -31,6 +34,14 @@ public class Detour {
 		this.players.remove(player);
 	}
 
+	public @Nullable DetourPlayer getPlayerByUuid(@NotNull UUID uuid) {
+		for (DetourPlayer player : this.players) {
+			if (player.getUuid().equals(uuid))
+				return player;
+		}
+		return null;
+	}
+
 	public int getPlayerPoint(@NotNull DetourPlayer player) {
 		return this.players.indexOf(player) + 1;
 	}
@@ -41,6 +52,10 @@ public class Detour {
 
 	public void setStartedTimeMs(long startedTimeMs) {
 		this.startedTimeMs = startedTimeMs;
+	}
+
+	public @Nullable DetourPlayer getCurrentPlayer() {
+		return currentPlayer;
 	}
 
 	public boolean isStarted() {
@@ -55,31 +70,27 @@ public class Detour {
 	}
 
 	public @Nullable DetourPlayer nextPlayer() {
-		if (players.isEmpty()) {
+		if (this.players.isEmpty()) {
 			this.stop();
 			return null;
 		}
-		DetourPlayer detourPlayer = players.get(0);
-		players.remove(0);
-		return detourPlayer;
-	}
-
-	public @NotNull DetourPlayer getCurrentPlayer() {
-		if (players.isEmpty()) throw new RuntimeException("Players list is empty");
-		return players.get(0);
+		this.currentPlayer = players.get(0);
+		this.players.remove(0);
+		return this.currentPlayer;
 	}
 
 	public void stop() {
-		Bukkit.broadcast(Component.text("Обход закончился!"));
+		MyDetour.getInstance().getLogger().info("Detour ended");
+		Bukkit.broadcast(Component.text("Обход закончился! Время обхода: " + DetourManager.getDetourFormattedTime()));
 		this.clearStats();
 //		Title title = Title.title(titleComp, subtitleComp, times);
 //		Audience.audience(Bukkit.getOnlinePlayers()).showTitle(title);
-		MyDetour.getInstance().getLogger().info("Detour ended");
 	}
 
 	private void clearStats() {
 		this.players.clear();
 		this.startedTimeMs = 0L;
+		this.currentPlayer = null;
 	}
 
 	public void saveData(boolean forced) {
