@@ -10,11 +10,16 @@ public class DetourConfig {
 	public static Component detourEndTitle;
 	public static Component detourEndSubtitle;
 
-	public static void setup() {
+	public static void loadValues() {
 		FileConfiguration config = INSTANCE.getConfig();
 
 
 		detourEndTitle = Component.text(config.getString("messages.detour-end"));
 		detourEndTitle = Component.text(config.getString("messages.detour-end"));
+	}
+
+	public static void reload() {
+		INSTANCE.reloadConfig();
+		loadValues();
 	}
 }

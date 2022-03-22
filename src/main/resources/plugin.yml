@@ -1,7 +1,7 @@
 name: MyDetour
 version: '${project.version}'
 main: ru.deelter.detour.MyDetour
-api-version: 1.18
+api-version: 1.17
 prefix: MyDetour
 authors: [ DeelTer ]
 description: Detours on your server

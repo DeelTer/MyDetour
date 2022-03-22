@@ -1,6 +1,7 @@
 package ru.deelter.detour.utils;
 
-import org.bukkit.entity.Player;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.deelter.detour.MyDetour;
@@ -11,24 +12,27 @@ import java.util.List;
 
 public class Detour {
 
-	private final List<Player> players = new ArrayList<>();
-	private int point;
+	private final List<DetourPlayer> players = new ArrayList<>();
 	private long startedTimeMs;
 
-	public List<Player> getPlayers() {
+	public List<DetourPlayer> getPlayers() {
 		return players;
 	}
 
-	public void setPlayers(List<Player> players) {
+	public void setPlayers(List<DetourPlayer> players) {
 		this.players.addAll(players);
 	}
 
-	public void addPlayer(@NotNull Player player) {
+	public void addPlayer(@NotNull DetourPlayer player) {
 		this.players.add(player);
 	}
 
-	public void removePlayer(@NotNull Player player) {
+	public void removePlayer(@NotNull DetourPlayer player) {
 		this.players.remove(player);
+	}
+
+	public int getPlayerPoint(@NotNull DetourPlayer player) {
+		return this.players.indexOf(player) + 1;
 	}
 
 	public long getStartedTimeMs() {
@@ -39,39 +43,34 @@ public class Detour {
 		this.startedTimeMs = startedTimeMs;
 	}
 
-	public int getPoint() {
-		return point;
-	}
-
-	public void setPoint(int point) {
-		this.point = point;
-	}
-
 	public boolean isStarted() {
 		return startedTimeMs != 0L;
 	}
 
 	public void start() {
+		Bukkit.broadcast(Component.text("Обход начался! Вступите в него командой /detour join"));
 		MyDetour.getInstance().getLogger().info("Detour started");
 		this.clearStats();
 		this.startedTimeMs = System.currentTimeMillis();
 	}
 
-	public @Nullable Player nextPlayer() {
-		MyDetour.getInstance().getLogger().info("Detour point: " + point);
-		if (players.size() < point) {
-			this.end();
+	public @Nullable DetourPlayer nextPlayer() {
+		if (players.isEmpty()) {
+			this.stop();
 			return null;
 		}
-		return players.get(point++);
+		DetourPlayer detourPlayer = players.get(0);
+		players.remove(0);
+		return detourPlayer;
 	}
 
-	public @NotNull Player getCurrentPlayer() {
+	public @NotNull DetourPlayer getCurrentPlayer() {
 		if (players.isEmpty()) throw new RuntimeException("Players list is empty");
-		return players.get(point);
+		return players.get(0);
 	}
 
-	public void end() {
+	public void stop() {
+		Bukkit.broadcast(Component.text("Обход закончился!"));
 		this.clearStats();
 //		Title title = Title.title(titleComp, subtitleComp, times);
 //		Audience.audience(Bukkit.getOnlinePlayers()).showTitle(title);
@@ -80,12 +79,11 @@ public class Detour {
 
 	private void clearStats() {
 		this.players.clear();
-		this.point = 0;
 		this.startedTimeMs = 0L;
 	}
 
-	public void saveData() {
-		if (this.isStarted())
+	public void saveData(boolean forced) {
+		if (forced || this.isStarted())
 			DetourDataManager.saveData(this);
 	}
 

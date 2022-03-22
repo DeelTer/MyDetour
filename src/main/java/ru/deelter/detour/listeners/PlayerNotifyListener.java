@@ -10,7 +10,7 @@ public class PlayerNotifyListener implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		if (DetourManager.DETOUR.isStarted()) {
+		if (DetourManager.getDetour().isStarted()) {
 			Player player = event.getPlayer();
 			player.sendMessage("Обход уже начался! Чтобы присоединиться - пиши /detour join");
 		}

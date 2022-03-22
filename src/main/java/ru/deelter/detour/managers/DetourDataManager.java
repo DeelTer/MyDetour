@@ -1,24 +1,25 @@
 package ru.deelter.detour.managers;
 
-import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.detour.MyDetour;
 import ru.deelter.detour.utils.Detour;
+import ru.deelter.detour.utils.DetourPlayer;
+import ru.deelter.detour.utils.LocationUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DetourDataManager {
 
 	private static final MyDetour INSTANCE = MyDetour.getInstance();
 
-	private static final String fileName = "config.yml";
-
+	private static final String fileName = "detour-data.yml";
 	private static File configFile;
 	private static YamlConfiguration config;
 
@@ -38,11 +39,13 @@ public class DetourDataManager {
 
 	public static void saveData(@NotNull Detour detour) {
 		config.set("detour.time", detour.getStartedTimeMs());
-		config.set("detour.point", detour.getPoint());
-
-		List<String> playerUuids = new ArrayList<>();
-		detour.getPlayers().forEach(player -> playerUuids.add(player.getUniqueId().toString()));
-		config.set("detour.players", playerUuids);
+		detour.getPlayers().forEach(detourPlayer -> {
+			ConfigurationSection section = config.createSection("detour.players." + detourPlayer.getUuid());
+			String shortFormatLocation = LocationUtils.toString(detourPlayer.getLastLocation());
+			section.set("location", shortFormatLocation);
+			section.set("name", detourPlayer.getName());
+		});
+		saveConfigFile();
 	}
 
 	public static void loadData(@NotNull Detour detour) {
@@ -56,15 +59,29 @@ public class DetourDataManager {
 
 		detour.setStartedTimeMs(timeMills);
 
-		int point = config.getInt("detour.point");
-		detour.setPoint(point);
-
-		List<Player> players = new ArrayList<>();
-		config.getStringList("detour.players").forEach(uuid -> {
-			Player player = Bukkit.getPlayer(uuid);
-			players.add(player);
-		});
+		List<DetourPlayer> players = new ArrayList<>();
+		ConfigurationSection playersSection = config.getConfigurationSection("detour.players");
+		if (playersSection != null) {
+			playersSection.getKeys(false).forEach(uuidRaw -> {
+				UUID uuid = UUID.fromString(uuidRaw);
+				String name = playersSection.getString(uuidRaw + ".name");
+				if (name == null) {
+					MyDetour.getInstance().getLogger().info("Data error. Player name is null (" + uuidRaw + ")");
+					return;
+				}
+				String rawLocation = playersSection.getString(uuidRaw + ".location");
+				if (rawLocation == null) {
+					MyDetour.getInstance().getLogger().info("Data error. Player location is null (" + uuidRaw + ")");
+					return;
+				}
+				Location location = LocationUtils.fromString(rawLocation);
+				DetourPlayer detourPlayer = new DetourPlayer(uuid, name, location);
+				players.add(detourPlayer);
+			});
+		}
 		detour.setPlayers(players);
+		config.set("detour", null);
+		saveConfigFile();
 		MyDetour.getInstance().getLogger().info("Previous detour data loaded successfully");
 	}
 }

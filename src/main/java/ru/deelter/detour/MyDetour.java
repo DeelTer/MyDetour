@@ -8,6 +8,7 @@ import ru.deelter.detour.configs.DetourConfig;
 import ru.deelter.detour.listeners.PlayerNotifyListener;
 import ru.deelter.detour.managers.DetourDataManager;
 import ru.deelter.detour.managers.DetourManager;
+import ru.deelter.detour.utils.LocationUtils;
 
 public final class MyDetour extends JavaPlugin {
 
@@ -26,11 +27,12 @@ public final class MyDetour extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		// Plugin startup logic
-		DetourConfig.setup();
+		DetourConfig.loadValues();
 		DetourDataManager.setupFiles();
 		DetourManager.load();
 
 		DetourCommand.setup(this);
+		LocationUtils.setup();
 		this.setupListeners();
 	}
 

@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.deelter</groupId>
-    <artifactId>Detour</artifactId>
+    <artifactId>MyDetour</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>Detour</name>
+    <name>MyDetour</name>
 
     <description>Detours on your server</description>
     <properties>
@@ -25,8 +25,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
             <plugin>
