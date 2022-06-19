@@ -9,7 +9,7 @@ import ru.deelter.detour.managers.DetourManager;
 import ru.deelter.detour.utils.Detour;
 import ru.deelter.detour.utils.DetourPlayer;
 
-public class DetourNextCommand {
+public class NextCommand {
 
 	public static void execute(@NotNull CommandSender sender, String[] args) {
 		if (!sender.isOp()) {

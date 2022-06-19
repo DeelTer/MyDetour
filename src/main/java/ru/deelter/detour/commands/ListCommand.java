@@ -7,7 +7,7 @@ import ru.deelter.detour.utils.DetourPlayer;
 
 import java.util.List;
 
-public class DetourListCommand {
+public class ListCommand {
 
 	public static void execute(CommandSender sender, String[] args) {
 		Detour detour = DetourManager.getDetour();

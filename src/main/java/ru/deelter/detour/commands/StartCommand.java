@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.deelter.detour.managers.DetourManager;
 import ru.deelter.detour.utils.Detour;
 
-public class DetourStartCommand {
+public class StartCommand {
 
 	public static void execute(@NotNull CommandSender sender, String[] args) {
 		if (!sender.isOp()) {

@@ -35,14 +35,14 @@ public class DetourCommand implements TabExecutor {
 
 		String cmd = args[0].toLowerCase();
 		switch (cmd) {
-			case "join" -> DetourJoinCommand.execute(sender, args);
-			case "leave" -> DetourLeaveCommand.execute(sender, args);
-			case "start" -> DetourStartCommand.execute(sender, args);
-			case "stop" -> DetourStopCommand.execute(sender, args);
-			case "reload" -> DetourReloadCommand.execute(sender, args);
-			case "next" -> DetourNextCommand.execute(sender, args);
-			case "list" -> DetourListCommand.execute(sender, args);
-			case "savedata" -> DetourSaveDataCommand.execute(sender, args);
+			case "join" -> JoinCommand.execute(sender, args);
+			case "leave" -> LeaveCommand.execute(sender, args);
+			case "start" -> StartCommand.execute(sender, args);
+			case "stop" -> StopCommand.execute(sender, args);
+			case "reload" -> ReloadCommand.execute(sender, args);
+			case "next" -> NextCommand.execute(sender, args);
+			case "list" -> ListCommand.execute(sender, args);
+			case "savedata" -> SaveDataCommand.execute(sender, args);
 		}
 		return true;
 	}

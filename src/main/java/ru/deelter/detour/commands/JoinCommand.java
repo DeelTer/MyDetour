@@ -6,7 +6,7 @@ import ru.deelter.detour.managers.DetourManager;
 import ru.deelter.detour.utils.Detour;
 import ru.deelter.detour.utils.DetourPlayer;
 
-public class DetourLeaveCommand {
+public class JoinCommand {
 
 	public static void execute(CommandSender sender, String[] args) {
 		if (!(sender instanceof Player player)) {
@@ -19,12 +19,13 @@ public class DetourLeaveCommand {
 			sender.sendMessage("Обход ещё не начался!");
 			return;
 		}
+
 		DetourPlayer detourPlayer = DetourPlayer.from(player);
-		if (!detour.getPlayers().contains(detourPlayer)) {
-			sender.sendMessage("Вы не участвуете в обходе!");
+		if (detour.getPlayers().contains(detourPlayer)) {
+			sender.sendMessage("Вы уже участвуете в обходе!");
 			return;
 		}
-		detour.removePlayer(detourPlayer);
-		sender.sendMessage("Вы покинули обход!");
+		detour.addPlayer(detourPlayer);
+		sender.sendMessage("Вы вступили в обход! Ваше место в очереди: " + detour.getPlayerPoint(detourPlayer));
 	}
 }

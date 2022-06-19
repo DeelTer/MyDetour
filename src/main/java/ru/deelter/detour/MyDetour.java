@@ -28,7 +28,7 @@ public final class MyDetour extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		// Plugin startup logic
-		DetourConfig.loadValues();
+		DetourConfig.load(this);
 		DetourDataManager.setupFiles();
 		DetourManager.load();
 
