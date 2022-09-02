@@ -63,8 +63,9 @@ public class Detour {
 	}
 
 	public void start() {
-		Bukkit.broadcast(Component.text("Обход начался! Вступите в него командой /detour join"));
-		MyDetour.getInstance().getLogger().info("Detour started");
+		MyDetour instance = MyDetour.getInstance();
+		instance.getLogger().info("Detour started");
+		Bukkit.broadcast(instance.getDetourConfig().getDetourStartMessage());
 		this.clearStats();
 		this.startedTimeMs = System.currentTimeMillis();
 	}
@@ -80,8 +81,9 @@ public class Detour {
 	}
 
 	public void stop() {
-		MyDetour.getInstance().getLogger().info("Detour ended");
-		Bukkit.broadcast(Component.text("Обход закончился! Время обхода: " + DetourManager.getDetourFormattedTime()));
+		MyDetour instance = MyDetour.getInstance();
+		instance.getLogger().info("Detour ended");
+		Bukkit.broadcast(instance.getDetourConfig().getDetourEndMessage().append(Component.text(DetourManager.getDetourFormattedTime())));
 		this.clearStats();
 //		Title title = Title.title(titleComp, subtitleComp, times);
 //		Audience.audience(Bukkit.getOnlinePlayers()).showTitle(title);

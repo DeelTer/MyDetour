@@ -2,8 +2,7 @@ package ru.deelter.detour.commands;
 
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.detour.configs.DetourConfig;
-import ru.deelter.detour.managers.DetourManager;
+import ru.deelter.detour.MyDetour;
 
 public class ReloadCommand {
 
@@ -12,7 +11,7 @@ public class ReloadCommand {
 			sender.sendMessage("У вас нет прав на выполнение этой команды");
 			return;
 		}
-		DetourConfig.reload();
+		MyDetour.getInstance().getDetourConfig().reload();
 		sender.sendMessage("Конфиг успешно перезагружен");
 	}
 }
